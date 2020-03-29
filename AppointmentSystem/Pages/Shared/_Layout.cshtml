@@ -3,15 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AppointmentSystem</title>
+    <title>@ViewData["Title"] - Система записи</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/fullcalendar/core/main.min.css" />
+    <link rel="stylesheet" href="~/lib/fullcalendar/bootstrap/main.min.css" />
+    <link rel="stylesheet" href="~/lib/fullcalendar/daygrid/main.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">AppointmentSystem</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Система записи</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -37,12 +41,19 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - AppointmentSystem - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2020 - Система записи
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/moment.js/moment.min.js"></script>
+    <script src="~/lib/fullcalendar/core/main.min.js"></script>
+    <script src="~/lib/fullcalendar/daygrid/main.min.js"></script>
+    <script src="~/lib/fullcalendar/interaction/main.min.js"></script>
+    <script src="~/lib/fullcalendar/bootstrap/main.min.js"></script>
+    <script src="~/lib/fullcalendar/core/locales/ru.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)

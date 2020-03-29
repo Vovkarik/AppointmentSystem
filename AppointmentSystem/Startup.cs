@@ -14,26 +14,37 @@ namespace AppointmentSystem
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			Configuration = configuration;
+			Environment = environment;
 		}
 
 		public IConfiguration Configuration { get; }
+		public IWebHostEnvironment Environment { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddRazorPages();
+			var builder = services.AddRazorPages();
+
+#if DEBUG
+			if(Environment.IsDevelopment())
+			{
+				builder.AddRazorRuntimeCompilation();
+			}
+#endif
+
 			services.AddDbContext<AppointmentContext>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app)
 		{
-			if(env.IsDevelopment())
+			if(Environment.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
+				app.UseBrowserLink();
 			}
 			else
 			{

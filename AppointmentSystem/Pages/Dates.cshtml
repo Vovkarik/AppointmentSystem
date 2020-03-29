@@ -1,0 +1,23 @@
+﻿@page "{int doctorId:int?}"
+@model AppointmentSystem.Pages.DatesModel
+@{
+    ViewData["Title"] = "Даты";
+}
+
+<h2 class="mb-2">Даты записи</h2>
+<div id="calendar"></div>
+
+@section Scripts
+{
+    <script>
+        let calendarElement = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarElement, {
+            plugins: ['bootstrap', 'interaction', 'dayGrid'],
+            themeSystem: 'bootstrap',
+            defaultView: 'dayGridMonth',
+            locale: 'ru'
+        });
+
+        calendar.render();
+    </script>
+}
