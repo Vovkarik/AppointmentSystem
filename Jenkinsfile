@@ -1,5 +1,13 @@
+properties([disableConcurrentBuilds()])
+
 pipeline {
     agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'10', artifactNumToKeepStr:'10'))
+        timestamps()
+    }
+
     environment {
        dotnet ='C:\\Program Files (x86)\\dotnet\\'
     }
