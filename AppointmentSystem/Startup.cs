@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AppointmentSystem.Database;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,11 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			var builder = services.AddRazorPages();
+			var builder = services.AddRazorPages()
+				.AddJsonOptions(o =>
+				{
+					o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+				});
 
 #if DEBUG
 			if(Environment.IsDevelopment())

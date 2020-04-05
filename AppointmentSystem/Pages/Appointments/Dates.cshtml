@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}"
 @model AppointmentSystem.Pages.DatesModel
 @{
     ViewData["Title"] = "Даты";
@@ -15,7 +15,31 @@
             plugins: ['bootstrap', 'interaction', 'dayGrid'],
             themeSystem: 'bootstrap',
             defaultView: 'dayGridMonth',
-            locale: 'ru'
+            locale: 'ru',
+            navLinks: true,
+            navLinkDayClick: function (date, jsEvent) {
+                let e = calendar.getEvents().find(x => moment(x.start).isSame(date));
+                window.location.href = e.url;
+            }
+        });
+
+        const colors = {
+            'Free': '#5cb85c',
+            'HalfFull': '#f0ad4e',
+            'Full': '#d9534f'
+        };
+
+        $.get('/Appointments/Dates/datelist').done(function (dates) {
+            dates.forEach(function (availableDate) {
+                calendar.addEvent({
+                    allDay: true,
+                    rendering: 'background',
+                    start: moment(availableDate.date).startOf('day').toDate(),
+                    end: moment(availableDate.date).endOf('day').toDate(),
+                    url: 'http://google.com/',
+                    backgroundColor: colors[availableDate.availability]
+                });
+            });
         });
 
         calendar.render();

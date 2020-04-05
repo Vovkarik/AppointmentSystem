@@ -16,14 +16,9 @@ namespace AppointmentSystem.Pages.Appointments
 				return RedirectToPage("/Appointments/Doctors");
 			}
 
-			if(date == null)
+			if(date == null || time == null)
 			{
 				return RedirectToPage("/Appointments/Dates", new { doctorId = doctorId });
-			}
-
-			if(time == null)
-			{
-				return RedirectToPage("/Appointments/Dates", new { doctorId = doctorId, date = date });
 			}
 
 			return RedirectToPage("/Appointments/New");
