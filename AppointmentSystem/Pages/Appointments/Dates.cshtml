@@ -29,14 +29,19 @@
             'Full': '#d9534f'
         };
 
+        let searchParams = new URLSearchParams(window.location.search);
+
         $.get('/Appointments/Dates/datelist').done(function (dates) {
             dates.forEach(function (availableDate) {
+                let startDate = moment(availableDate.date).startOf('day').toDate();
+                let endDate = moment(availableDate.date).endOf('day').toDate();
+
                 calendar.addEvent({
                     allDay: true,
                     rendering: 'background',
-                    start: moment(availableDate.date).startOf('day').toDate(),
-                    end: moment(availableDate.date).endOf('day').toDate(),
-                    url: 'http://google.com/',
+                    start: startDate,
+                    end: endDate,
+                    url: '/Appointments/TimeSlots' + '?' + $.param({ doctorid: searchParams.get('doctorId'), date: startDate.toISOString() }),
                     backgroundColor: colors[availableDate.availability]
                 });
             });
