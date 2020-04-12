@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace AppointmentSystem.Pages
 {
-	public class EnterCodeModel : PageModel
+	public class VerifyModel : PageModel
 	{
 		public const string generatedSessionCode = "_Code";
 		public IActionResult OnGet(string number)

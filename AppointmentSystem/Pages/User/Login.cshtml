@@ -1,0 +1,18 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Аутентификация";
+}
+
+<h4>Аутентификация</h4>
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <label for="phone">Введите номер телефона</label>
+            <input type="tel" id="phone" name="phone">
+            <div asp-validation-summary="All" class="text-danger" name="number"></div>
+            <p>На этот номер будет выслано СМС с кодом для подтверждения вашей личности</p>
+            <input type="submit" class="btn btn-primary" value="Выслать код"/>
+        </form>
+    </div>
+</div>

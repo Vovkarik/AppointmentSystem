@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AppointmentSystem.Middleware;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AppointmentSystem
 {
@@ -28,8 +31,6 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDistributedMemoryCache();
-
 			services.AddSession(options =>
 			{
 				options.IdleTimeout = TimeSpan.FromSeconds(1000);
@@ -50,6 +51,22 @@ namespace AppointmentSystem
 #endif
 
 			services.AddDbContext<AppointmentContext>();
+			services.AddIdentity<ApplicationUser, IdentityRole>()
+				.AddEntityFrameworkStores<AppointmentContext>()
+				.AddDefaultTokenProviders();
+			services.AddAuthentication(o =>
+			{
+				o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			})
+				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+				{
+					o.LoginPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
+				});
+				// TODO: uncomment this once admin panel is up.
+				//.AddCookie("Administration", o =>
+				//{
+				//	o.LoginPath = new Microsoft.AspNetCore.Http.PathString("");
+				//});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +89,7 @@ namespace AppointmentSystem
 			app.UseHttpContextItemsMiddleware();
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 			app.UseSession();
 			app.UseEndpoints(endpoints =>

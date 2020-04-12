@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages
 {
-    public class AuthentificationModel : PageModel
+    public class LoginModel : PageModel
     {
 		public IActionResult OnGet()
 		{
 			return Page();
 		}
-		public IActionResult OnPost(string number)
+		public IActionResult OnPost(string phone)
 		{
-			return RedirectToPage("/Appointments/EnterCode", number);
+			return RedirectToPage("/User/Verify", new { phone = phone });
 		}
 
 	}
