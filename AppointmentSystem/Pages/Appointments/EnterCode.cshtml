@@ -1,0 +1,18 @@
+﻿@page "{handler?}"
+@using Microsoft.AspNetCore.Http
+@model AppointmentSystem.Pages.EnterCodeModel
+@{
+    ViewData["Title"] = "Аутентификация";
+}
+
+<h4>Аутентификация</h4>
+<div class="row">
+    <div class="col-md-8">
+        <p>@HttpContext.Session.GetString(EnterCodeModel.generatedSessionCode)</p>
+        <form method="post">
+            <p>Введите ваш код из СМС</p>
+            <input placeholder="Код" name = "enteredCode">
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
+        </form>
+    </div>
+</div>

@@ -9,8 +9,12 @@ namespace AppointmentSystem.Pages.Appointments
 {
     public class NewModel : PageModel
     {
-        public IActionResult OnGet(int? doctorId, DateTime? date, DateTime? time)
+        public IActionResult OnGet(string? number, int? doctorId, DateTime? date, DateTime? time)
         {
+			if(number == null)
+			{
+				return RedirectToPage("/Appointments/Authentification");
+			}
 			if(doctorId == null)
 			{
 				return RedirectToPage("/Appointments/Doctors");
@@ -21,7 +25,7 @@ namespace AppointmentSystem.Pages.Appointments
 				return RedirectToPage("/Appointments/Dates", new { doctorId = doctorId });
 			}
 
-			return RedirectToPage("/Appointments/New");
+			return Page();
 		}
     }
 }

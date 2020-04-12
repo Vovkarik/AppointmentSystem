@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AppointmentSystem.Middleware;
 
 namespace AppointmentSystem
 {
@@ -27,6 +28,14 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDistributedMemoryCache();
+
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromSeconds(1000);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
 			var builder = services.AddRazorPages()
 				.AddJsonOptions(o =>
 				{
@@ -60,11 +69,11 @@ namespace AppointmentSystem
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-
+			app.UseHttpContextItemsMiddleware();
 			app.UseRouting();
 
 			app.UseAuthorization();
-
+			app.UseSession();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();

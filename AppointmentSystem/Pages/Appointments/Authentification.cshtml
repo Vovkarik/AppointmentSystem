@@ -1,0 +1,18 @@
+﻿@page "{handler?}"
+@model AppointmentSystem.Pages.AuthentificationModel
+@{
+    ViewData["Title"] = "Аутентификация";
+}
+
+<h4>Аутентификация</h4>
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <p>Введите свой номер телефона:</p>
+            <input placeholder="Вaш номер">
+            <div asp-validation-summary="All" class="text-danger" name="number"></div>
+            <p>На этот номер будет выслано СМС с кодом для подтверждения вашей личности</p>
+            <button asp-action="RenderCode" class="btn btn-primary">Выслать код</button>
+        </form>
+    </div>
+</div>
