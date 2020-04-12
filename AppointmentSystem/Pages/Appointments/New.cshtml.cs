@@ -9,7 +9,7 @@ namespace AppointmentSystem.Pages.Appointments
 {
     public class NewModel : PageModel
     {
-        public IActionResult OnGet(string? number, int? doctorId, DateTime? date, DateTime? time)
+        public IActionResult OnGet(string number, int? doctorId, DateTime? date, DateTime? time)
         {
 			if(number == null)
 			{

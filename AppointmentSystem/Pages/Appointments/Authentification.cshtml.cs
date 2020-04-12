@@ -13,7 +13,7 @@ namespace AppointmentSystem.Pages
 		{
 			return Page();
 		}
-		public IActionResult OnPost(string? number)
+		public IActionResult OnPost(string number)
 		{
 			return RedirectToPage("/Appointments/EnterCode", number);
 		}

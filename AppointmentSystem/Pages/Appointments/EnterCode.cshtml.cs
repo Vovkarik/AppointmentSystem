@@ -12,7 +12,7 @@ namespace AppointmentSystem.Pages
 	public class EnterCodeModel : PageModel
 	{
 		public const string generatedSessionCode = "_Code";
-		public IActionResult OnGet(string? number)
+		public IActionResult OnGet(string number)
 		{
 			if (string.IsNullOrEmpty(HttpContext.Session.GetString(generatedSessionCode)))
 			{
@@ -21,7 +21,7 @@ namespace AppointmentSystem.Pages
 			return Page();
 		}
 		
-		public IActionResult OnPost(string? enteredCode)
+		public IActionResult OnPost(string enteredCode)
 		{
 			if(enteredCode == HttpContext.Session.GetString(generatedSessionCode))
 			{
