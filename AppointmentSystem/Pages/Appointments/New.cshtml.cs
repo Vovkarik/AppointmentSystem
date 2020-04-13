@@ -9,23 +9,19 @@ namespace AppointmentSystem.Pages.Appointments
 {
     public class NewModel : PageModel
     {
-        public IActionResult OnGet(string number, int? doctorId, DateTime? date, DateTime? time)
+        public IActionResult OnGet(int? doctorId, DateTime? date, DateTime? time)
         {
-			if(number == null)
-			{
-				return RedirectToPage("/Appointments/Authentification");
-			}
 			if(doctorId == null)
 			{
 				return RedirectToPage("/Appointments/Doctors");
 			}
 
-			if(date == null || time == null)
+			if(date == null)
 			{
 				return RedirectToPage("/Appointments/Dates", new { doctorId = doctorId });
 			}
 
-			return Page();
+			return RedirectToPage("/Index");
 		}
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages
 {
-	[Authorize]
-    public class DoctorsModel : PageModel
+	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User, Roles = Roles.User)]
+	public class DoctorsModel : PageModel
     {
 		public List<AvailableDoctor> AvailableDoctors { get; } = new List<AvailableDoctor>();
 

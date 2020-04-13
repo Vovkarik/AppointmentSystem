@@ -11,49 +11,20 @@ namespace AppointmentSystem.Pages
 {
 	public class VerifyModel : PageModel
 	{
-		public const string generatedSessionCode = "_Code";
-		public IActionResult OnGet(string number)
+		private string returnUrl = string.Empty;
+		private string phone = string.Empty;
+
+		public IActionResult OnGet(string returnUrl, string phone)
 		{
-			if (string.IsNullOrEmpty(HttpContext.Session.GetString(generatedSessionCode)))
-			{
-				HttpContext.Session.SetString(generatedSessionCode, generateCode());
-			}
+			this.returnUrl = returnUrl ?? "/";
+			this.phone = phone;
+
 			return Page();
 		}
-		
-		public IActionResult OnPost(string enteredCode)
+
+		public IActionResult OnPost(string code)
 		{
-			if(enteredCode == HttpContext.Session.GetString(generatedSessionCode))
-			{
-				return RedirectToPage("/Appointments/Doctors");
-			}
-			else
-			{
-				return Page();
-			}
-		}
-
-		public static string generateCode()
-		{
-			string num = "0123456789";
-			int len = num.Length;
-			string code = string.Empty;
-			int codeDigits = 6;
-			string finalDigit;
-			int getIndex;
-
-			for(int i=0; i<codeDigits; i++)
-			{
-				do
-				{
-					getIndex = new Random().Next(0, len);
-					finalDigit = num.ToCharArray()[getIndex].ToString();
-				}
-				while (code.IndexOf(finalDigit)!=-1);
-				code += finalDigit;
-			}
-
-			return code;
+			return Page();
 		}
 	}
 }

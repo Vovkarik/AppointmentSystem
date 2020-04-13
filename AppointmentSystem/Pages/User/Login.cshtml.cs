@@ -9,13 +9,17 @@ namespace AppointmentSystem.Pages
 {
     public class LoginModel : PageModel
     {
+		[BindProperty(SupportsGet = true)]
+		public string ReturnUrl { get; set; }
+
 		public IActionResult OnGet()
 		{
 			return Page();
 		}
+
 		public IActionResult OnPost(string phone)
 		{
-			return RedirectToPage("/User/Verify", new { phone = phone });
+			return RedirectToPage("/User/Verify", new { returnUrl = ReturnUrl, phone = phone });
 		}
 
 	}

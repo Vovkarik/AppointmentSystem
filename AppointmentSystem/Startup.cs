@@ -31,12 +31,16 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDistributedMemoryCache();
+
 			services.AddSession(options =>
 			{
-				options.IdleTimeout = TimeSpan.FromSeconds(1000);
+				options.IdleTimeout = TimeSpan.FromMinutes(10);
 				options.Cookie.HttpOnly = true;
 				options.Cookie.IsEssential = true;
 			});
+
+
 			var builder = services.AddRazorPages()
 				.AddJsonOptions(o =>
 				{
@@ -56,17 +60,17 @@ namespace AppointmentSystem
 				.AddDefaultTokenProviders();
 			services.AddAuthentication(o =>
 			{
-				o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+				o.DefaultScheme = AuthenticationSchemes.User;
 			})
-				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+				.AddCookie(AuthenticationSchemes.User, o =>
 				{
-					o.LoginPath = new Microsoft.AspNetCore.Http.PathString("/User/Login");
+					o.LoginPath = "/User/Login";
 				});
-				// TODO: uncomment this once admin panel is up.
-				//.AddCookie("Administration", o =>
-				//{
-				//	o.LoginPath = new Microsoft.AspNetCore.Http.PathString("");
-				//});
+			// TODO: uncomment this once admin panel is up.
+			//.AddCookie(AuthenticationSchemes.Administrator, o =>
+			//{
+			//	o.LoginPath = "";
+			//});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +95,9 @@ namespace AppointmentSystem
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
 			app.UseSession();
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();
