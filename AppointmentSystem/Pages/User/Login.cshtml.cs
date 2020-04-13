@@ -49,6 +49,7 @@ namespace AppointmentSystem.Pages
 
 			string secretKey = await userAuthentication.SendVerificationCodeAndGetSecretKey(phone);
 			TempData["VerificationSecret"] = secretKey;
+			TempData["Phone"] = internationalPhone;
 			return RedirectToPage("/User/Verify", new { returnUrl = ReturnUrl });
 		}
 

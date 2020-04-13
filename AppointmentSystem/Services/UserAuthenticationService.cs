@@ -1,4 +1,8 @@
-﻿using OtpNet;
+﻿using AppointmentSystem.Database;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
+using OtpNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +14,21 @@ namespace AppointmentSystem.Services
 	public interface IUserAuthenticationService
 	{
 		Task<string> SendVerificationCodeAndGetSecretKey(string phone);
-		bool VerifyVerificationCode(string secretKey, string verificationCode);
+		Task<bool> VerifyVerificationCode(string secretKey, string phone, string verificationCode);
 	}
 
 	public class UserAuthenticationService : IUserAuthenticationService
 	{
 		private readonly int GenerationDelaySeconds = 60 * 10;
 		private readonly ISmsService smsService;
+		private readonly UserManager<ApplicationUser> userManager;
+		private readonly SignInManager<ApplicationUser> signInManager;
 
-		public UserAuthenticationService(ISmsService smsService)
+		public UserAuthenticationService(ISmsService smsService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
 		{
 			this.smsService = smsService;
+			this.userManager = userManager;
+			this.signInManager = signInManager;
 		}
 
 		public async Task<string> SendVerificationCodeAndGetSecretKey(string phone)
@@ -39,10 +47,27 @@ namespace AppointmentSystem.Services
 			return Convert.ToBase64String(secretKey);
 		}
 
-		public bool VerifyVerificationCode(string secretKey, string verificationCode)
+		public async Task<bool> VerifyVerificationCode(string secretKey, string phone, string verificationCode)
 		{
 			var otp = new Totp(Convert.FromBase64String(secretKey), step: GenerationDelaySeconds);
-			return otp.VerifyTotp(verificationCode, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
+			bool succeeded = otp.VerifyTotp(verificationCode, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
+   
+			if(succeeded)
+			{
+				ApplicationUser user = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
+				if(user == null)
+				{
+					user = new ApplicationUser
+					{
+						PhoneNumber = phone
+					};
+					await userManager.CreateAsync(user);
+				}
+				
+				await signInManager.SignInAsync(user, false);
+			}
+
+			return succeeded;
 		}
 	}
 }

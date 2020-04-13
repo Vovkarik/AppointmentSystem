@@ -29,14 +29,19 @@ namespace AppointmentSystem.Pages
 			return Page();
 		}
 
-		public IActionResult OnPost(string returnUrl, string code)
+		public async Task<IActionResult> OnPost(string returnUrl, string code)
 		{
 			if(!TempData.TryGetValue("VerificationSecret", out object secretKey))
 			{
 				return RedirectToPage("/User/Login", new { returnUrl = returnUrl });
 			}
 
-			if(!userAuthentication.VerifyVerificationCode((string)secretKey, code))
+			if(!TempData.TryGetValue("Phone", out object phone))
+			{
+				return RedirectToPage("/User/Login", new { returnUrl = returnUrl });
+			}
+
+			if(!await userAuthentication.VerifyVerificationCode((string)secretKey, (string)phone, code))
 			{
 				// Prevent clearing the session if the code is invalid.
 				TempData.Keep();

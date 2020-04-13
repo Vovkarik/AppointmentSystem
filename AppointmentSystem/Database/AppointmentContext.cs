@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Database
 {
-	public class AppointmentContext : DbContext
+	public class AppointmentContext : IdentityDbContext<ApplicationUser>
 	{
 		public DbSet<DoctorCategory> DoctorCategories { get; set; }
 		public DbSet<Doctor> Doctors { get; set; }

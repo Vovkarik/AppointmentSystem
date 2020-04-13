@@ -13,7 +13,7 @@ namespace AppointmentSystem.Services
 	public class SmsService : ISmsService
 	{
 		private const string accountSid = "ACd18347b836c1c66ab08918590bb7adac";
-		private const string authToken = "3d0e8daf9b0cd816cf67508822653af0";
+		private const string authToken = "35462b0d17c71da0bdd8aa22576ab478";
 
 		public SmsService()
 		{
