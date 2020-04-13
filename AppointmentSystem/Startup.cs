@@ -14,6 +14,7 @@ using AppointmentSystem.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using AppointmentSystem.Services;
 
 namespace AppointmentSystem
 {
@@ -40,12 +41,11 @@ namespace AppointmentSystem
 				options.Cookie.IsEssential = true;
 			});
 
-
 			var builder = services.AddRazorPages()
 				.AddJsonOptions(o =>
 				{
 					o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-				});
+				}).AddSessionStateTempDataProvider();
 
 #if DEBUG
 			if(Environment.IsDevelopment())
@@ -71,6 +71,9 @@ namespace AppointmentSystem
 			//{
 			//	o.LoginPath = "";
 			//});
+
+			services.AddSingleton<ISmsService, SmsService>();
+			services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
