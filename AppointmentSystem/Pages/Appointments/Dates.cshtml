@@ -41,7 +41,7 @@
                     rendering: 'background',
                     start: startDate,
                     end: endDate,
-                    url: '/Appointments/TimeSlots' + '?' + $.param({ doctorid: searchParams.get('doctorId'), date: startDate.toISOString() }),
+                    url: '/Appointments/TimeSlots' + '?' + $.param({ doctorId: searchParams.get('doctorId'), date: startDate.toISOString() }),
                     backgroundColor: colors[availableDate.availability]
                 });
             });

@@ -28,7 +28,7 @@ namespace AppointmentSystem.Pages
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPost(string phone)
+		public async Task<IActionResult> OnPostAsync(string phone)
 		{
 			string internationalPhone = "";
 

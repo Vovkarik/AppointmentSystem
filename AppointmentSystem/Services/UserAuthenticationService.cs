@@ -16,6 +16,8 @@ namespace AppointmentSystem.Services
 	{
 		Task<string> SendVerificationCodeAndGetSecretKey(string phone);
 		Task<bool> LoginWithVerificationCodeAsync(string secretKey, string phone, string verificationCode);
+		Task LogOutAsync();
+		Task<ApplicationUser> GetCurrentUserAsync();
 	}
 
 	public class UserAuthenticationService : IUserAuthenticationService
@@ -24,14 +26,12 @@ namespace AppointmentSystem.Services
 		private readonly ISmsService smsService;
 		private readonly IHttpContextAccessor httpContextAccessor;
 		private readonly UserManager<ApplicationUser> userManager;
-		private readonly SignInManager<ApplicationUser> signInManager;
 
-		public UserAuthenticationService(ISmsService smsService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public UserAuthenticationService(ISmsService smsService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
 		{
 			this.smsService = smsService;
 			this.httpContextAccessor = httpContextAccessor;
 			this.userManager = userManager;
-			this.signInManager = signInManager;
 		}
 
 		public async Task<string> SendVerificationCodeAndGetSecretKey(string phone)
