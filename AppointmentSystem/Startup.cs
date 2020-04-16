@@ -70,6 +70,7 @@ namespace AppointmentSystem
 			services.AddAuthentication(o =>
 			{
 				o.DefaultScheme = AuthenticationSchemes.User;
+				o.DefaultAuthenticateScheme = AuthenticationSchemes.User;
 			})
 				.AddCookie(AuthenticationSchemes.User, o =>
 				{
