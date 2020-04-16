@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppointmentSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages
 {
-    public class DoctorsModel : PageModel
+	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
+	public class DoctorsModel : PageModel
     {
 		public List<AvailableDoctor> AvailableDoctors { get; } = new List<AvailableDoctor>();
 

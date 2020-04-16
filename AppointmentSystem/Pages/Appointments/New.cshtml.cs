@@ -16,12 +16,12 @@ namespace AppointmentSystem.Pages.Appointments
 				return RedirectToPage("/Appointments/Doctors");
 			}
 
-			if(date == null || time == null)
+			if(date == null)
 			{
 				return RedirectToPage("/Appointments/Dates", new { doctorId = doctorId });
 			}
 
-			return RedirectToPage("/Appointments/New");
+			return RedirectToPage("/Index");
 		}
     }
 }
