@@ -12,7 +12,6 @@ namespace AppointmentSystem.Database
 
 		public DbSet<DoctorCategory> DoctorCategories { get; set; }
 		public DbSet<Doctor> Doctors { get; set; }
-		public DbSet<Service> Services { get; set; }
 		public DbSet<AppointmentSlot> AppointmentSlots { get; set; }
 		public DbSet<Appointment> Appointments { get; set; }
 	}

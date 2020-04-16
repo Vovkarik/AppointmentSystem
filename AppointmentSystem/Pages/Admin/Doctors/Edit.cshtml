@@ -1,0 +1,51 @@
+﻿@page
+@model AppointmentSystem.Pages.Admin.Doctors.EditModel
+
+@{
+    ViewData["Title"] = "Редактировать";
+}
+
+<h1>Редактировать</h1>
+
+<h4>Врачи</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Doctor.Id" />
+            <div class="form-group">
+                <label asp-for="Doctor.DoctorCategory" class="control-label"></label>
+                <select asp-for="Doctor.DoctorCategoryId" asp-items="@Model.DoctorCategories" class="form-control">
+                </select>
+                <span asp-validation-for="Doctor.DoctorCategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Doctor.Name" class="control-label"></label>
+                <input asp-for="Doctor.Name" class="form-control" />
+                <span asp-validation-for="Doctor.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Doctor.Surname" class="control-label"></label>
+                <input asp-for="Doctor.Surname" class="form-control" />
+                <span asp-validation-for="Doctor.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Doctor.MiddleName" class="control-label"></label>
+                <input asp-for="Doctor.MiddleName" class="form-control" />
+                <span asp-validation-for="Doctor.MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Назад к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

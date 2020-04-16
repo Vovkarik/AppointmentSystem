@@ -3,15 +3,17 @@ using System;
 using AppointmentSystem.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AppointmentSystem.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    partial class AppointmentContextModelSnapshot : ModelSnapshot
+    [Migration("20200416141728_RemoveServices")]
+    partial class RemoveServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

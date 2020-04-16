@@ -1,0 +1,10 @@
+﻿@page
+@model AppointmentSystem.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Администрация";
+}
+
+<h1>Панель управления админиcтратора</h1>
+<a asp-page="./Categories/Index" class="btn btn-primary">Записи</a>
+<a asp-page="./Categories/Index" class="btn btn-primary">Категории врачей</a>
+<a asp-page="./Doctors/Index" class="btn btn-primary">Врачи</a>

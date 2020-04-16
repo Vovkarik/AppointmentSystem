@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using AppointmentSystem.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace AppointmentSystem
 {
@@ -59,7 +61,11 @@ namespace AppointmentSystem
 			}
 #endif
 
-			services.AddDbContext<AppointmentContext>(o => o.UseNpgsql(Configuration.GetConnectionString("Database")));
+			services.AddDbContext<AppointmentContext>(o =>
+			{
+				o.UseLazyLoadingProxies();
+				o.UseNpgsql(Configuration.GetConnectionString("Database"));
+			});
 			services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 			{
 				o.User.AllowedUserNameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-()";
@@ -124,7 +130,6 @@ namespace AppointmentSystem
 		private async Task CreateRoles(IServiceProvider serviceProvider)
 		{
 			var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-			var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 			string[] roles = { Roles.User, Roles.Administrator };
 
 			foreach(string role in roles)
