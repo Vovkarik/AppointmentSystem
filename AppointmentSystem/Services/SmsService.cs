@@ -12,11 +12,10 @@ namespace AppointmentSystem.Services
 
 	public class SmsService : ISmsService
 	{
-		private const string accountSid = "ACd18347b836c1c66ab08918590bb7adac";
-		private const string authToken = "35462b0d17c71da0bdd8aa22576ab478";
-
 		public SmsService()
 		{
+			string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+			string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
 			TwilioClient.Init(accountSid, authToken);
 		}
 

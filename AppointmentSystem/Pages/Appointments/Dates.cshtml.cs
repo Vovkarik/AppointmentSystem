@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages
 {
-	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User, Roles = Roles.User)]
+	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
 	public class DatesModel : PageModel
     {
         public IActionResult OnGet(int? doctorId)

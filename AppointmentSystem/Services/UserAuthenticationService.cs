@@ -1,11 +1,12 @@
 ﻿using AppointmentSystem.Database;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;
 using OtpNet;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -14,19 +15,21 @@ namespace AppointmentSystem.Services
 	public interface IUserAuthenticationService
 	{
 		Task<string> SendVerificationCodeAndGetSecretKey(string phone);
-		Task<bool> VerifyVerificationCode(string secretKey, string phone, string verificationCode);
+		Task<bool> LoginWithVerificationCodeAsync(string secretKey, string phone, string verificationCode);
 	}
 
 	public class UserAuthenticationService : IUserAuthenticationService
 	{
 		private readonly int GenerationDelaySeconds = 60 * 10;
 		private readonly ISmsService smsService;
+		private readonly IHttpContextAccessor httpContextAccessor;
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly SignInManager<ApplicationUser> signInManager;
 
-		public UserAuthenticationService(ISmsService smsService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public UserAuthenticationService(ISmsService smsService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
 		{
 			this.smsService = smsService;
+			this.httpContextAccessor = httpContextAccessor;
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 		}
@@ -47,11 +50,11 @@ namespace AppointmentSystem.Services
 			return Convert.ToBase64String(secretKey);
 		}
 
-		public async Task<bool> VerifyVerificationCode(string secretKey, string phone, string verificationCode)
+		public async Task<bool> LoginWithVerificationCodeAsync(string secretKey, string phone, string verificationCode)
 		{
 			var otp = new Totp(Convert.FromBase64String(secretKey), step: GenerationDelaySeconds);
 			bool succeeded = otp.VerifyTotp(verificationCode, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
-   
+
 			if(succeeded)
 			{
 				ApplicationUser user = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
@@ -59,15 +62,36 @@ namespace AppointmentSystem.Services
 				{
 					user = new ApplicationUser
 					{
+						UserName = StripSpecialCharacters(phone),
 						PhoneNumber = phone
 					};
-					await userManager.CreateAsync(user);
+					var result = await userManager.CreateAsync(user);
+					result = await userManager.AddToRoleAsync(user, Roles.User);
 				}
-				
-				await signInManager.SignInAsync(user, false);
+
+				var identity = new ClaimsIdentity(AuthenticationSchemes.User);
+				identity.AddClaim(new Claim(ClaimTypes.Role, Roles.User));
+				identity.AddClaim(new Claim(ClaimTypes.Name, user.Id));
+				var principal = new ClaimsPrincipal(identity);
+				await httpContextAccessor.HttpContext.SignInAsync(AuthenticationSchemes.User, principal);
 			}
 
 			return succeeded;
+		}
+
+		public async Task LogOutAsync()
+		{
+			await httpContextAccessor.HttpContext.SignOutAsync(AuthenticationSchemes.User);
+		}
+
+		public Task<ApplicationUser> GetCurrentUserAsync()
+		{
+			return userManager.FindByIdAsync(httpContextAccessor.HttpContext.User.Identity.Name);
+		}
+
+		private string StripSpecialCharacters(string phone)
+		{
+			return new string(phone.Where(ch => char.IsDigit(ch)).ToArray());
 		}
 	}
 }

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using AppointmentSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem
 {
@@ -32,13 +33,17 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDistributedMemoryCache();
+			services.AddHttpContextAccessor();
 
 			services.AddSession(options =>
 			{
 				options.IdleTimeout = TimeSpan.FromMinutes(10);
+				options.Cookie.Name = ".AppointmentSystem";
+				options.Cookie.Path = "/";
 				options.Cookie.HttpOnly = true;
 				options.Cookie.IsEssential = true;
+				options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+				options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
 			});
 
 			var builder = services.AddRazorPages()
@@ -54,10 +59,14 @@ namespace AppointmentSystem
 			}
 #endif
 
-			services.AddDbContext<AppointmentContext>();
-			services.AddIdentity<ApplicationUser, IdentityRole>()
+			services.AddDbContext<AppointmentContext>(o => o.UseNpgsql(Configuration.GetConnectionString("Database")));
+			services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+			{
+				o.User.AllowedUserNameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-()";
+			})
 				.AddEntityFrameworkStores<AppointmentContext>()
 				.AddDefaultTokenProviders();
+
 			services.AddAuthentication(o =>
 			{
 				o.DefaultScheme = AuthenticationSchemes.User;
@@ -66,6 +75,7 @@ namespace AppointmentSystem
 				{
 					o.LoginPath = "/User/Login";
 				});
+
 			// TODO: uncomment this once admin panel is up.
 			//.AddCookie(AuthenticationSchemes.Administrator, o =>
 			//{
@@ -77,7 +87,7 @@ namespace AppointmentSystem
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app)
+		public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
 		{
 			if(Environment.IsDevelopment())
 			{
@@ -96,6 +106,7 @@ namespace AppointmentSystem
 			app.UseHttpContextItemsMiddleware();
 			app.UseRouting();
 
+			app.UseCookiePolicy();
 			app.UseAuthentication();
 			app.UseAuthorization();
 
@@ -105,6 +116,23 @@ namespace AppointmentSystem
 			{
 				endpoints.MapRazorPages();
 			});
+
+			CreateRoles(serviceProvider).Wait();
+		}
+
+		private async Task CreateRoles(IServiceProvider serviceProvider)
+		{
+			var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+			string[] roles = { Roles.User, Roles.Administrator };
+
+			foreach(string role in roles)
+			{
+				if(!await roleManager.RoleExistsAsync(role))
+				{
+					await roleManager.CreateAsync(new IdentityRole(role));
+				}
+			}
 		}
 	}
 }

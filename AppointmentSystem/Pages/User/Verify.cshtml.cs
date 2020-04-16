@@ -41,14 +41,14 @@ namespace AppointmentSystem.Pages
 				return RedirectToPage("/User/Login", new { returnUrl = returnUrl });
 			}
 
-			if(!await userAuthentication.VerifyVerificationCode((string)secretKey, (string)phone, code))
+			if(!await userAuthentication.LoginWithVerificationCodeAsync((string)secretKey, (string)phone, code))
 			{
 				// Prevent clearing the session if the code is invalid.
 				TempData.Keep();
 				return RedirectToPage(new { returnUrl });
 			}
 
-			return RedirectToPage(returnUrl);
+			return LocalRedirect(returnUrl);
 		}
 	}
 }
