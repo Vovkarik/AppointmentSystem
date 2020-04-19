@@ -83,12 +83,6 @@ namespace AppointmentSystem
 					o.LoginPath = "/User/Login";
 				});
 
-			// TODO: uncomment this once admin panel is up.
-			//.AddCookie(AuthenticationSchemes.Administrator, o =>
-			//{
-			//	o.LoginPath = "";
-			//});
-
 			services.AddSingleton<ISmsService, SmsService>();
 			services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
 		}
