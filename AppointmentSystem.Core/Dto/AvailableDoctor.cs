@@ -1,6 +1,6 @@
-﻿using AppointmentSystem.Database;
+﻿using AppointmentSystem.Core.Entities;
 
-namespace AppointmentSystem.Models
+namespace AppointmentSystem.Core.Dto
 {
 	public class AvailableDoctor
 	{

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AppointmentSystem.Models;
+using AppointmentSystem.Core;
+using AppointmentSystem.Core.Dto;
+using AppointmentSystem.Data.Queries;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages
@@ -12,20 +12,20 @@ namespace AppointmentSystem.Pages
 	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
 	public class DoctorsModel : PageModel
     {
+		private readonly IGetAvailableDoctorsQuery getDoctorsQuery;
+
 		public List<AvailableDoctor> AvailableDoctors { get; } = new List<AvailableDoctor>();
 
-        public void OnGet()
+		public DoctorsModel(IGetAvailableDoctorsQuery getDoctorsQuery)
+		{
+			this.getDoctorsQuery = getDoctorsQuery;
+		}
+
+		public async Task OnGetAsync()
         {
-			for(int i = 0; i < 15; ++i)
+			foreach(AvailableDoctor doctor in await getDoctorsQuery.ExecuteAsync())
 			{
-				AvailableDoctors.Add(new AvailableDoctor
-				{
-					Id = i + 1,
-					Name = "Тест",
-					Surname = "Тестов",
-					MiddleName = "Тестович",
-					Category = new Database.DoctorCategory { Name = "кардиолог" }
-				});
+				AvailableDoctors.Add(doctor);
 			}
         }
     }

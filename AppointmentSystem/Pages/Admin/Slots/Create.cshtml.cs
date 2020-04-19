@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using AppointmentSystem.Database;
+using AppointmentSystem.Core.Entities;
+using AppointmentSystem.Data;
 
 namespace AppointmentSystem.Pages.Admin.Slots
 {
     public class CreateModel : PageModel
     {
-        private readonly AppointmentSystem.Database.AppointmentContext _context;
+        private readonly ApplicationDbContext _context;
 
 		public SelectList Doctors { get; set; }
 
-        public CreateModel(AppointmentSystem.Database.AppointmentContext context)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
         }

@@ -6,16 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200415122753_UsersAdd.cs" />
-    <Compile Remove="Migrations\20200415122753_UsersAdd.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="libphonenumber-csharp" Version="8.12.1" />
+    <PackageReference Include="CqrsSpirit" Version="2.0.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0-preview1.19506.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,12 +20,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.96" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
-    <PackageReference Include="Otp.NET" Version="1.2.2" />
-    <PackageReference Include="Twilio" Version="5.39.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\AppointmentSystem.Core\AppointmentSystem.Core.csproj" />
+    <ProjectReference Include="..\AppointmentSystem.Data\AppointmentSystem.Data.csproj" />
+    <ProjectReference Include="..\AppointmentSystem.Infrastructure\AppointmentSystem.Infrastructure.csproj" />
   </ItemGroup>
 
 

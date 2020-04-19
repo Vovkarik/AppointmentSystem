@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem
+﻿namespace AppointmentSystem.Core
 {
 	public static class Roles
 	{

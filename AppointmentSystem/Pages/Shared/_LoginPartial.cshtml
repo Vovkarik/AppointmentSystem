@@ -1,8 +1,7 @@
-﻿@using AppointmentSystem.Services
-@inject IUserAuthenticationService UserAuthentication
-
+﻿@using AppointmentSystem.Core.Services
+@inject IUserIdentityService UserIdentity
 @{
-    var currentUser = await UserAuthentication.GetCurrentUserAsync();
+    var currentUser = await UserIdentity.GetCurrentUserAsync();
 }
 
     <form class="form-inline">

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AppointmentSystem.Database;
+using AppointmentSystem.Core.Entities;
+using AppointmentSystem.Data;
 
 namespace AppointmentSystem.Pages.Admin.Slots
 {
     public class DeleteModel : PageModel
     {
-        private readonly AppointmentSystem.Database.AppointmentContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DeleteModel(AppointmentSystem.Database.AppointmentContext context)
+        public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
         }

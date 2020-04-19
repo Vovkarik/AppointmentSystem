@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace AppointmentSystem.Database
+namespace AppointmentSystem.Core.Entities
 {
 	public class AppointmentSlot
 	{
@@ -14,5 +14,6 @@ namespace AppointmentSystem.Database
 
 		[DisplayName("Врач")]
 		public virtual Doctor Doctor { get; set; }
+		public virtual Appointment Appointment { get; set; }
 	}
 }

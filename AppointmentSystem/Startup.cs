@@ -1,23 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AppointmentSystem.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AppointmentSystem.Middleware;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using AppointmentSystem.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
+using AppointmentSystem.Core;
+using AppointmentSystem.Core.Services;
+using AppointmentSystem.Infrastructure.Services;
+using AppointmentSystem.Data;
+using AppointmentSystem.Core.Entities;
+using CqrsSpirit;
 
 namespace AppointmentSystem
 {
@@ -35,6 +32,7 @@ namespace AppointmentSystem
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddControllers();
 			services.AddHttpContextAccessor();
 
 			services.AddSession(options =>
@@ -61,16 +59,19 @@ namespace AppointmentSystem
 			}
 #endif
 
-			services.AddDbContext<AppointmentContext>(o =>
+			services.AddDbContext<ApplicationDbContext>(o =>
 			{
 				o.UseLazyLoadingProxies();
 				o.UseNpgsql(Configuration.GetConnectionString("Database"));
 			});
+
+			services.AddCqrsSpirit();
+
 			services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 			{
 				o.User.AllowedUserNameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-()";
 			})
-				.AddEntityFrameworkStores<AppointmentContext>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
 			services.AddAuthentication(o =>
@@ -83,8 +84,9 @@ namespace AppointmentSystem
 					o.LoginPath = "/User/Login";
 				});
 
-			services.AddSingleton<ISmsService, SmsService>();
-			services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
+			services.AddSingleton<ISmsService, TwilioSmsService>();
+			services.AddTransient<IUserVerificationService, UserVerificationService>();
+			services.AddTransient<IUserIdentityService, UserIdentityService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,6 +118,7 @@ namespace AppointmentSystem
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();
+				endpoints.MapControllers();
 			});
 
 			CreateRoles(serviceProvider).Wait();

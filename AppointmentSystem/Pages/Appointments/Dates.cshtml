@@ -1,4 +1,4 @@
-﻿@page "{handler?}"
+﻿@page
 @model AppointmentSystem.Pages.DatesModel
 @{
     ViewData["Title"] = "Даты";
@@ -31,7 +31,8 @@
 
         let searchParams = new URLSearchParams(window.location.search);
 
-        $.get('/Appointments/Dates/datelist').done(function (dates) {
+        $.get('/api/Dates', { doctorId: searchParams.get('doctorId') }).done(function (dates) {
+            console.log(dates);
             dates.forEach(function (availableDate) {
                 let startDate = moment(availableDate.date).startOf('day').toDate();
                 let endDate = moment(availableDate.date).endOf('day').toDate();

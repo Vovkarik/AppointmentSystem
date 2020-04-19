@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AppointmentSystem.Services;
+using AppointmentSystem.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PhoneNumbers;
 
 namespace AppointmentSystem.Pages
 {
     public class LoginModel : PageModel
     {
-		private readonly IUserAuthenticationService userAuthentication;
-		private readonly PhoneNumberUtil phoneUtil;
+		private readonly IUserVerificationService verificationService;
 
 		[BindProperty(SupportsGet = true)]
 		public string ReturnUrl { get; set; }
 
-		public LoginModel(IUserAuthenticationService userAuthentication)
+		public LoginModel(IUserVerificationService verificationService)
 		{
-			this.userAuthentication = userAuthentication;
-			phoneUtil = PhoneNumberUtil.GetInstance();
+			this.verificationService = verificationService;
 		}
 
 		public IActionResult OnGet()
@@ -30,27 +25,15 @@ namespace AppointmentSystem.Pages
 
 		public async Task<IActionResult> OnPostAsync(string phone)
 		{
-			string internationalPhone = "";
-
-			try
+			if(InternationalPhone.TryParse(phone, out InternationalPhone parsed))
 			{
-				PhoneNumber phoneNumber = phoneUtil.Parse(phone, "RU");
-				internationalPhone = phoneUtil.Format(phoneNumber, PhoneNumberFormat.INTERNATIONAL);
-			}
-			catch(NumberParseException e)
-			{
-				ModelState.AddModelError(e.ErrorType.ToString(), e.Message);
+				UserVerificationInfo info = await verificationService.SendVerificationCodeAsync(parsed);
+				TempData["VerificationSecret"] = info.SecretKey;
+				TempData["Phone"] = info.Phone.Formatted;
+				return RedirectToPage("/User/Verify", new { ReturnUrl });
 			}
 
-			if(string.IsNullOrEmpty(internationalPhone))
-			{
-				return Page();
-			}
-
-			string secretKey = await userAuthentication.SendVerificationCodeAndGetSecretKey(phone);
-			TempData["VerificationSecret"] = secretKey;
-			TempData["Phone"] = internationalPhone;
-			return RedirectToPage("/User/Verify", new { returnUrl = ReturnUrl });
+			return Page();
 		}
 
 	}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppointmentSystem.Models
+namespace AppointmentSystem.Core.Dto
 {
 	public class AvailableTimeSlot
 	{

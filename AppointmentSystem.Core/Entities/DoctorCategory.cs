@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AppointmentSystem.Database
+namespace AppointmentSystem.Core.Entities
 {
 	public class DoctorCategory
 	{

@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using AppointmentSystem.Database;
+using AppointmentSystem.Core.Entities;
+using AppointmentSystem.Data;
 
 namespace AppointmentSystem.Pages.Admin.Doctors
 {
     public class CreateModel : PageModel
     {
-        private readonly AppointmentSystem.Database.AppointmentContext _context;
+        private readonly ApplicationDbContext _context;
 
 		public SelectList DoctorCategories { get; set; }
 
-		public CreateModel(AppointmentSystem.Database.AppointmentContext context)
+		public CreateModel(ApplicationDbContext context)
         {
             _context = context;
         }

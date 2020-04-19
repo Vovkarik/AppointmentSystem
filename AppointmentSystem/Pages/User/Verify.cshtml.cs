@@ -1,54 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Collections;
+using AppointmentSystem.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http;
-using AppointmentSystem.Services;
 
 namespace AppointmentSystem.Pages
 {
 	public class VerifyModel : PageModel
 	{
-		private readonly IUserAuthenticationService userAuthentication;
+		private readonly IUserVerificationService verificationService;
+		private readonly IUserIdentityService identityService;
 
+		[BindProperty(SupportsGet = true)]
 		public string ReturnUrl { get; set; }
 
-		public VerifyModel(IUserAuthenticationService userAuthentication)
+		public VerifyModel(IUserVerificationService verificationService, IUserIdentityService identityService)
 		{
-			this.userAuthentication = userAuthentication;
+			this.verificationService = verificationService;
+			this.identityService = identityService;
 		}
 
-		public IActionResult OnGet(string returnUrl, string phone)
+		public IActionResult OnGet()
 		{
-			// Return to index if we don't have an URL to go back to.
-			ReturnUrl = string.IsNullOrEmpty(returnUrl) ? "/Index" : returnUrl;
-
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPost(string returnUrl, string code)
+		public async Task<IActionResult> OnPostAsync(string code)
 		{
+			ReturnUrl ??= "/Index";
 			if(!TempData.TryGetValue("VerificationSecret", out object secretKey))
 			{
-				return RedirectToPage("/User/Login", new { returnUrl = returnUrl });
+				return RedirectToPage("/User/Login", new { ReturnUrl });
 			}
 
 			if(!TempData.TryGetValue("Phone", out object phone))
 			{
-				return RedirectToPage("/User/Login", new { returnUrl = returnUrl });
+				return RedirectToPage("/User/Login", new { ReturnUrl });
 			}
 
-			if(!await userAuthentication.LoginWithVerificationCodeAsync((string)secretKey, (string)phone, code))
+			var internationalPhone = new InternationalPhone((string)phone);
+			var info = new UserVerificationInfo(internationalPhone, (string)secretKey);
+			if(!verificationService.CheckVerificationCode(info, code))
 			{
-				// Prevent clearing the session if the code is invalid.
+				// Prevent deletion of secret if code was entered incorrectly.
 				TempData.Keep();
-				return RedirectToPage(new { returnUrl });
+				return Page();
 			}
 
-			return LocalRedirect(returnUrl);
+			await identityService.SignInOrRegisterWithPhoneAsync(internationalPhone);
+			return LocalRedirect(ReturnUrl);
 		}
 	}
 }
