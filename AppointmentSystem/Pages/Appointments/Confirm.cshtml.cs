@@ -1,12 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using AppointmentSystem.Core;
 using AppointmentSystem.Core.Dto;
 using AppointmentSystem.Data.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AppointmentSystem.Pages.Appointments
 {
+	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
     public class ConfirmModel : PageModel
     {
 		private readonly IGetTimeSlotQuery getSlotQuery;
