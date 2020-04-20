@@ -1,15 +1,14 @@
 ﻿@page
-@using Microsoft.AspNetCore.Http
 @model VerifyModel
 @{
-    ViewData["Title"] = "Аутентификация";
+    ViewData["Title"] = "Вход";
 }
 
 <h4>Аутентификация</h4>
 <div class="row">
     <div class="col-md-8">
         <form method="post">
-            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+            <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="@Model.ReturnUrl" />
             <label for="code">Код подтверждения</label>
             <input type="number" id="code" name="code">
             <div asp-validation-summary="All" class="text-danger" name="code"></div>

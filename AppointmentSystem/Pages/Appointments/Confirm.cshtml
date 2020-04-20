@@ -15,6 +15,9 @@
     <div class="card-body">
         <h5 class="card-title">@Model.Slot.Doctor.FullName</h5>
         <p class="card-text">@Model.Slot.Doctor.CategoryName</p>
-        <a href="#" class="btn btn-primary">Записаться</a>
+        <form method="post">
+            <input type="hidden" id="TimeSlotId" name="TimeSlotId" value="@Model.TimeSlotId.GetValueOrDefault()"/>
+            <input type="submit" class="btn btn-primary" value="Записаться" />
+        </form>
     </div>
 </div>
