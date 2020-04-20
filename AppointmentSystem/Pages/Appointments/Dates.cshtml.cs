@@ -9,11 +9,14 @@ namespace AppointmentSystem.Pages
 	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
 	public class DatesModel : PageModel
     {
-		public IActionResult OnGet(int? doctorId)
+		[BindProperty(SupportsGet = true)]
+		public int? DoctorId { get; set; }
+
+		public IActionResult OnGet()
         {
-			if(doctorId == null)
+			if(DoctorId == null)
 			{
-				return RedirectToPage("/Appointments/New");
+				return RedirectToPage("/Appointments/Doctors");
 			}
 
 			return Page();

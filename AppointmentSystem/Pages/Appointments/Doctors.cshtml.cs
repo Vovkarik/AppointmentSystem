@@ -23,10 +23,7 @@ namespace AppointmentSystem.Pages
 
 		public async Task OnGetAsync()
         {
-			foreach(AvailableDoctor doctor in await getDoctorsQuery.ExecuteAsync())
-			{
-				AvailableDoctors.Add(doctor);
-			}
+			AvailableDoctors.AddRange(await getDoctorsQuery.ExecuteAsync());
         }
     }
 }

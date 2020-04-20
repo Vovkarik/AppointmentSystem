@@ -6,5 +6,6 @@ namespace AppointmentSystem.Core.Dto
 	{
 		public int Id { get; set; }
 		public DateTime StartTime { get; set; }
+		public AvailableDoctor Doctor { get; set; }
 	}
 }

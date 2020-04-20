@@ -15,8 +15,8 @@ else
         @foreach(var slot in Model.AvailableSlots)
         {
             <li class="list-group-item">
-                <h4 class="mb-1">@slot.StartTime.ToString("H:mm")</h4>
-                <a asp-page="/Appointments/New" class="stretched-link"></a>
+                <h4 class="mb-1">@slot.StartTime.ToString("HH:mm")</h4>
+                <a asp-page="/Appointments/Confirm" asp-route-TimeSlotId=@slot.Id class="stretched-link"></a>
             </li>
         }
     </ol>

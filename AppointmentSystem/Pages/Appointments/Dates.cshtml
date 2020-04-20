@@ -19,7 +19,9 @@
             navLinks: true,
             navLinkDayClick: function (date, jsEvent) {
                 let e = calendar.getEvents().find(x => moment(x.start).isSame(date));
-                window.location.href = e.url;
+                if (e) {
+                    window.location.href = e.url;
+                }
             }
         });
 
@@ -31,7 +33,7 @@
 
         let searchParams = new URLSearchParams(window.location.search);
 
-        $.get('/api/Dates', { doctorId: searchParams.get('doctorId') }).done(function (dates) {
+        $.get('/api/Dates', { doctorId: searchParams.get('DoctorId') }).done(function (dates) {
             console.log(dates);
             dates.forEach(function (availableDate) {
                 let startDate = moment(availableDate.date).startOf('day').toDate();
@@ -42,7 +44,7 @@
                     rendering: 'background',
                     start: startDate,
                     end: endDate,
-                    url: '/Appointments/TimeSlots' + '?' + $.param({ doctorId: searchParams.get('doctorId'), date: startDate.toISOString() }),
+                    url: '/Appointments/TimeSlots' + '?' + $.param({ DoctorId: searchParams.get('DoctorId'), Date: startDate.toISOString() }),
                     backgroundColor: colors[availableDate.availability]
                 });
             });

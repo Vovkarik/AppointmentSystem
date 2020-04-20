@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AppointmentSystem.Core;
 using AppointmentSystem.Core.Dto;
+using AppointmentSystem.Data.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,24 +13,34 @@ namespace AppointmentSystem.Pages.Appointments
 	[Authorize(AuthenticationSchemes = AuthenticationSchemes.User)]
 	public class TimeSlotsModel : PageModel
     {
+		private readonly IGetAvailableTimeSlotsForDayQuery getSlotsQuery;
+
+		[BindProperty(SupportsGet = true)]
+		public int? DoctorId { get; set; }
+
+		[BindProperty(SupportsGet = true)]
+		public DateTime? Date { get; set; }
+
 		public List<AvailableTimeSlot> AvailableSlots { get; } = new List<AvailableTimeSlot>();
 
-        public IActionResult OnGet(int? doctorId, DateTime? date)
+		public TimeSlotsModel(IGetAvailableTimeSlotsForDayQuery getSlotsQuery)
+		{
+			this.getSlotsQuery = getSlotsQuery;
+		}
+
+		public async Task<IActionResult> OnGetAsync()
         {
-			if(doctorId == null || date == null)
+			if(DoctorId == null)
 			{
-				return RedirectToPage("/Appointments/New");
+				return RedirectToPage("/Appointments/Doctors");
 			}
 
-			for(int i = 0; i < 5; ++i)
+			if(Date == null)
 			{
-				var slot = new AvailableTimeSlot
-				{
-					Id = i,
-					StartTime = date.Value.Date.AddHours(8 + i)
-				};
-				AvailableSlots.Add(slot);
+				return RedirectToPage("/Appointments/Dates");
 			}
+
+			AvailableSlots.AddRange(await getSlotsQuery.ExecuteAsync(DoctorId.Value, Date.Value.Date));
 
 			return Page();
         }

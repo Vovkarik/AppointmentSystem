@@ -1,0 +1,20 @@
+﻿@page
+@using System.Globalization
+@model AppointmentSystem.Pages.Appointments.ConfirmModel
+@{
+    ViewData["Title"] = "Запись";
+    CultureInfo culture = new CultureInfo("ru-RU");
+}
+
+<h2 class="mb-2">Подтвердить запись</h2>
+<div class="card">
+    <div class="card-header">
+        @Model.Slot.StartTime.ToString("dd MMMM yyyy", culture)
+        @Model.Slot.StartTime.ToString("HH:mm")
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.Slot.Doctor.FullName</h5>
+        <p class="card-text">@Model.Slot.Doctor.CategoryName</p>
+        <a href="#" class="btn btn-primary">Записаться</a>
+    </div>
+</div>

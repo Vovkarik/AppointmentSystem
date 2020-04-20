@@ -11,7 +11,7 @@
         <li class="list-group-item">
             <h4 class="mb-1">@doctor.FullName</h4>
             <p class="mb-1">@doctor.CategoryName</p>
-            <a asp-page="/Appointments/New" asp-route-doctorid="@doctor.Id"  class="stretched-link"></a>
+            <a asp-page="/Appointments/Dates" asp-route-DoctorId="@doctor.Id"  class="stretched-link"></a>
         </li>
     }
 </ol>
