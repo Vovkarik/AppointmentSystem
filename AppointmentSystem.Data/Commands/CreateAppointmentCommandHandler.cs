@@ -27,6 +27,7 @@ namespace AppointmentSystem.Data.Commands
 			};
 
 			await DbContext.Appointments.AddAsync(appointment);
+			await DbContext.SaveChangesAsync();
 		}
 	}
 }
