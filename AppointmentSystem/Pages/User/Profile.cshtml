@@ -1,0 +1,20 @@
+﻿@page
+@using System.Globalization
+@model AppointmentSystem.Pages.User.ProfileModel
+@{
+    ViewData["Title"] = "Профиль";
+    CultureInfo culture = new CultureInfo("ru-RU");
+}
+
+<h4>Мои записи</h4>
+
+@foreach(var slot in Model.Slots)
+{
+    <div class="card text-white bg-info mb-3">
+        <div class="card-header">@slot.Doctor.FullName</div>
+        <div class="card-body">
+            <h5 class="card-title">@slot.Doctor.Category.Name</h5>
+            <p class="card-text"><b>@slot.StartTime.ToString("HH:mm")</b>,  @slot.StartTime.ToString("dd MMMM yyyy", culture)</p>
+        </div>
+    </div>
+}
