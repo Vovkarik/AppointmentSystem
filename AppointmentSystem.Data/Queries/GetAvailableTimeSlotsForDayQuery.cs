@@ -29,7 +29,8 @@ namespace AppointmentSystem.Data.Queries
 			}
 
 			return await DbContext.AppointmentSlots
-				.Where(slot => slot.DoctorId == doctorId && slot.StartTime.Date == date.Date)
+				.Include(slot => slot.Appointment)
+				.Where(slot => slot.DoctorId == doctorId && slot.StartTime.Date == date.Date && slot.Appointment == null)
 				.OrderBy(slot => slot.StartTime)
 				.Select(slot => new AvailableTimeSlot
 				{

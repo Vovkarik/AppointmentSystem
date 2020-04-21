@@ -32,6 +32,7 @@ namespace AppointmentSystem.Data.Queries
 			DateTime now = DateTime.UtcNow;
 
 			var groups = (await DbContext.AppointmentSlots
+				.Include(slot => slot.Appointment)
 				.Where(slot => slot.DoctorId == doctorId && slot.StartTime > now)
 				.OrderBy(slot => slot.StartTime)
 				.ToListAsync())
