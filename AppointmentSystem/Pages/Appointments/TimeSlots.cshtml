@@ -4,15 +4,22 @@
     ViewData["Title"] = "TimeSlots";
 }
 
+<a asp-page="/Appointments/Dates" asp-route-DoctorId=@Model.DoctorId>
+    <span class="btn button-back">
+        <img src="~/img/arrow-small.png" />
+    </span>
+</a>
+
+
 <h2 class="mb-2">Время записи</h2>
-@if(Model.AvailableSlots.Count == 0)
+@if (Model.AvailableSlots.Count == 0)
 {
     <p>Извините, на этот день больше нет записи</p>
 }
 else
 {
     <ol class="list-group">
-        @foreach(var slot in Model.AvailableSlots)
+        @foreach (var slot in Model.AvailableSlots)
         {
             <li class="list-group-item">
                 <h4 class="mb-1">@slot.StartTime.ToString("HH:mm")</h4>

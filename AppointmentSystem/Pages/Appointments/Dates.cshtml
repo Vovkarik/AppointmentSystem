@@ -3,8 +3,14 @@
 @{
     ViewData["Title"] = "Даты";
 }
+<a asp-page="/Appointments/Doctors">
+    <span class="btn button-back">
+        <img src="~/img/arrow-small.png" />
+    </span>
+</a>
 
 <h2 class="mb-2">Даты записи</h2>
+
 <div id="calendar"></div>
 
 @section Scripts

@@ -92,3 +92,21 @@ body {
 .error-actions .btn {
     margin-right: 10px;
 }
+
+.button-back {
+    width: 105px;
+    padding-left: 5px;
+    font-size: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #808080;
+    border-radius: 10px;
+    display: block;
+}
+
+.button-back a {
+    display: inline-block;
+}
+
+.button-back:hover {
+    border: 2px solid #808080;
+}
