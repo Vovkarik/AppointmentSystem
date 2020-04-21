@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200420165404_FixUserId")]
-    partial class FixUserId
+    [Migration("20200421110222_RecreateInitial")]
+    partial class RecreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
