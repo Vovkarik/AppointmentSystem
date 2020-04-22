@@ -26,7 +26,7 @@ namespace AppointmentSystem.Data.Queries
 			DateTime now = DateTime.UtcNow.Date;
 			return await DbContext.AppointmentSlots
 				.Include(slot => slot.Appointment)
-				.Where(slot => slot.Appointment != null && slot.Appointment.UserId == userId && slot.StartTime.Date >= now)
+				.Where(slot => slot.Appointment != null && slot.Appointment.UserId == userId && slot.StartTime.Date >= now  && slot.StartTime.Hour >= now.Hour)
 				.OrderBy(slot => slot.StartTime)
 				.Select(slot => new AvailableTimeSlot
 				{

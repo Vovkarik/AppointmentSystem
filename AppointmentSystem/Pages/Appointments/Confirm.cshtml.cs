@@ -55,7 +55,7 @@ namespace AppointmentSystem.Pages.Appointments
 			{
 				var user = await identityService.GetCurrentUserAsync();
 				await commandsDispatcher.ExecuteAsync(new CreateAppointmentCommand(userId: user.Id, timeSlotId: TimeSlotId.GetValueOrDefault()));
-				return RedirectToPage("/Index");
+				return RedirectToPage("/User/Profile");
 			}
 			catch(Exception)
 			{
