@@ -13,7 +13,7 @@ namespace AppointmentSystem.Pages.Admin.Appointments
     {
 		private readonly IGetAllPendingAppointmentsQuery getAppointmentsQuery;
 
-		public List<AvailableTimeSlot> Slots { get; } = new List<AvailableTimeSlot>();
+		public List<AssignedAppointment> Appointments { get; } = new List<AssignedAppointment>();
 
 		public IndexModel(IGetAllPendingAppointmentsQuery getAppointmentsQuery)
 		{
@@ -22,7 +22,7 @@ namespace AppointmentSystem.Pages.Admin.Appointments
 
 		public async Task<IActionResult> OnGet()
         {
-			Slots.AddRange(await getAppointmentsQuery.ExecuteAsync());
+			Appointments.AddRange(await getAppointmentsQuery.ExecuteAsync());
 			return Page();
         }
     }
